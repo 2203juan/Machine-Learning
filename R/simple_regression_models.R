@@ -73,16 +73,6 @@ ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) +
 # delete parks because of hight correlation with air_qual
 df <-df[,-14]
 
-# simple linear regression between price and room_num
-lr <-lm(price~room_num, data = df)
-summary(lr)
-plot(df$room_num, df$price)
-abline(lr)
-
-# multiple linear regression
-
-multi_lr <- lm(price~., data = df)
-summary(multi_lr)
 
 # train-test split
 install.packages("caTools")
@@ -90,3 +80,21 @@ set.seed(0)
 split = sample.split(df, SplitRatio = 0.8)
 train <- subset(df, split == TRUE)
 test <- subset(df, split == FALSE)
+
+# linear regression
+lr <- lm(price~., data = train)
+
+# lets get the mean squared error in training step
+train_pred <- predict(lr, train)
+
+mse <- mean((train$price - train_pred)^2)
+print("TRAIN MSE")
+print(mse)
+
+# lets get the mean squared error in testing step
+test_pred <- predict(lr, test)
+
+mse2 <- mean((test$price - test_pred)^2)
+print("TEST MSE")
+print(mse2)
+

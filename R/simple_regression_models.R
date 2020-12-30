@@ -75,7 +75,7 @@ df <-df[,-14]
 
 
 # train-test split
-install.packages("caTools")
+library(caTools)
 set.seed(0)
 split = sample.split(df, SplitRatio = 0.8)
 train <- subset(df, split == TRUE)

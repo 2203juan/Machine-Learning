@@ -48,3 +48,29 @@ df$airport <- as.numeric(df$airport)
 df$waterbody <- as.numeric(df$waterbody)
 
 
+library(caTools)
+set.seed(0)
+split <- sample.split(df, SplitRatio = 0.8)
+train <- subset(df, split == TRUE)
+test <- subset(df, split == FALSE)
+
+
+# delete target columns
+trainX = train[,-14]
+testX = test[,-14]
+
+trainY = train$Sold
+testY = test$Sold
+
+k = 3
+
+trainX_s = scale(trainX)
+testX_s = scale(testX)
+
+library(class)
+set.seed(0)
+knn = knn(trainX_s, testX_s, trainY, k = k)
+
+# confusion matrix
+table(knn, testY)
+
